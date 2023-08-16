@@ -1,0 +1,107 @@
+html
+{
+  user-select: none;
+}
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Other background styles */
+}
+
+#mobile-controls {
+  position: fixed;
+  display: flex;
+  justify-content: bottom;
+  align-items: flex-end;
+  width: 80%;
+  height: 42%;
+  user-select: none; 
+  /* Adjusted to take up the bottom half of the screen */
+
+  bottom: 0;
+  left: 10%;
+}
+
+#mobile-up,
+#mobile-down,
+#mobile-left,
+#mobile-right {
+  user-select: none;
+  font-size: 35px;
+  padding: 10px 15px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #333;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+}
+
+#mobile-up {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#mobile-down {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#mobile-left {
+  position: absolute;
+  bottom: 50%;
+  left: 10%;
+  transform: translateY(50%);
+}
+
+#mobile-right {
+  position: absolute;
+  bottom: 50%;
+  right: 10%;
+  transform: translateY(50%);
+}
+#mobile-up img,
+#mobile-down img,
+#mobile-left img,
+#mobile-right img {
+  width: 100%; /* Scale the images to fit the button */
+  height: 100%;
+  transform-origin: center; /* Set the rotation origin to the center of the image */
+  transition: transform 0.2s ease; /* Add a smooth transition for rotation */
+}
+
+#mobile-up img {
+  transform: rotate(0deg); /* Initial rotation for up button */
+}
+
+#mobile-down img {
+  transform: rotate(180deg); /* Initial rotation for down button */
+}
+
+#mobile-left img {
+  transform: rotate(-90deg); /* Initial rotation for left button */
+}
+
+#mobile-right img {
+  transform: rotate(90deg); /* Initial rotation for right button */
+}
+
+#mobile-up:active,
+#mobile-down:active,
+#mobile-left:active,
+#mobile-right:active {
+  background-color: rgba(11, 11, 11, 0.2); /* Match the normal background color */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+
+
+
