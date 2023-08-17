@@ -1,7 +1,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// physics
 import * as CANNON from 'cannon';
+
+// Animation loop
+let previousTimestamp = 0; 
+
 
 // Initialize the scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -109,6 +114,7 @@ scene.add(lightHelper);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(gridHelper);
 
+
 // Load the 3D model
 const loader = new GLTFLoader();
 let player;
@@ -119,7 +125,7 @@ let animationAction;
 let cube; // Define the cube variable
 
 // Skybox
-const skybox = new THREE.TextureLoader().load('/images/sky.jpeg');
+const skybox = new THREE.TextureLoader().load('/assets/images/sky.jpeg');
 scene.background = skybox;
 
 // Load the model and start the animation loop
@@ -128,7 +134,7 @@ animate();
 
 // Load the model function
 function loadModel() {
-  loader.load('./robot_dog/scene.gltf', function (gltf) {
+  loader.load('./assets/robot_dog/scene.gltf', function (gltf) {
     player = gltf.scene;
 
     if (gltf.animations.length > 0) {
@@ -148,8 +154,8 @@ function loadModel() {
 }
 
 // Set up movement parameters
-const moveSpeed = 0.26;
-const rotationSpeed = 0.05;
+const moveSpeed = 15;
+const rotationSpeed = 3;
 const animationSpeedFactor = 3;
 const moveDirection = new THREE.Vector3();
 const front = new THREE.Vector3(0, 0, 1);
@@ -187,7 +193,7 @@ function pauseAnimation() {
 }
 
 // Handle player movement
-function handlePlayerMovement() {
+function handlePlayerMovement(deltaTime) {
   if (!player) return;
 
   moveDirection.set(0, 0, 0);
@@ -207,16 +213,11 @@ function handlePlayerMovement() {
   }
 
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
-    player.rotation.y += rotationSpeed;
+    player.rotation.y += rotationSpeed * deltaTime; // Apply rotation speed with deltaTime
   }
   if (keys['ArrowRight'] || keys['d'] || keys['D']) {
-    player.rotation.y -= rotationSpeed;
+    player.rotation.y -= rotationSpeed * deltaTime; // Apply rotation speed with deltaTime
   }
-
-  // 
-
-  // 
-
 
   if (moveDirection.lengthSq() > 0) {
     startOrResumeAnimation();
@@ -224,12 +225,13 @@ function handlePlayerMovement() {
     pauseAnimation();
   }
 
-  moveDirection.normalize().multiplyScalar(moveSpeed);
+  moveDirection.normalize().multiplyScalar(moveSpeed * deltaTime); // Apply moveSpeed with deltaTime
   moveDirection.applyQuaternion(player.quaternion);
   player.position.add(moveDirection);
 
   playerBody.position.copy(player.position);
 }
+
 
 
   // Event listeners for mobile controls
@@ -284,9 +286,13 @@ mobileRightButton.addEventListener('touchend', () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
     window.addEventListener('resize', onWindowResize);
+// Store the timestamp of the previous frame
 
 // Animation loop
-function animate() {
+function animate(timestamp) {
+  const deltaTime = (timestamp - previousTimestamp) / 1000; // Convert to seconds
+  previousTimestamp = timestamp;
+
   requestAnimationFrame(animate);
 
   if (mixer) {
@@ -311,6 +317,6 @@ function animate() {
     camera.lookAt(player.position);
   }
 
-  handlePlayerMovement();
+  handlePlayerMovement(deltaTime); // Pass deltaTime to the movement function
   renderer.render(scene, camera);
 }

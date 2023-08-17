@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
 html
 {
   user-select: none;
 }
+
 #bg {
   position: fixed;
   top: 0;
